@@ -1,30 +1,30 @@
 class UnionFind:
 
-    _Prnt = {}
-    _Sz = {}
-    _st_cnt = 0
+    Parent = {}
+    Sz = {}
+    set_cnt = 0
 
     def __init__(self, init_Arr = None):
-        self._Prnt = {}
-        self._Sz = {}
-        self._st_cnt = 0
+        self.Parent = {}
+        self.Sz = {}
+        self.set_cnt = 0
         if init_Arr:
             for elem in init_Arr:
-                self._Prnt[elem] = elem
-                self._Sz[elem] = 1
-            self._st_cnt = len(init_Arr)
+                self.Parent[elem] = elem
+                self.Sz[elem] = 1
+            self.set_cnt = len(init_Arr)
 
     def make_set(self, elem):
         if self.find(elem) is None:
-            self._Prnt[elem] = elem
-            self._Sz[elem] = 1
-            self._st_cnt += 1
+            self.Parent[elem] = elem
+            self.Sz[elem] = 1
+            self.set_cnt += 1
 
     def find(self, elem):
         try:
-            while self._Prnt[elem] is not elem:
-                self._Prnt[elem] = self._Prnt[self._Prnt[elem]]
-                elem = self._Prnt[elem]
+            while self.Parent[elem] is not elem:
+                self.Parent[elem] = self.Parent[self.Parent[elem]]
+                elem = self.Parent[elem]
             return elem
         except KeyError:
             return None
@@ -38,19 +38,19 @@ class UnionFind:
             self.make_set(elem2)
             root2 = elem2
         if root1 is not root2:
-            if self._Sz[root1] < self._Sz[root2]:
+            if self.Sz[root1] < self.Sz[root2]:
                 root1, root2 = root2, root1
-            self._Prnt[root2] = root1
-            self._Sz[root1] += self._Sz[root2]
-            self._st_cnt -= 1
+            self.Parent[root2] = root1
+            self.Sz[root1] += self.Sz[root2]
+            self.set_cnt -= 1
 
     def delete(self, elem):
         root = self.find(elem)
         if root:
-            if self._Sz[root] == 1:
-                del self._Prnt[root]
-                del self._Sz[root]
-                self._st_cnt -= 1
+            if self.Sz[root] == 1:
+                del self.Parent[root]
+                del self.Sz[root]
+                self.set_cnt -= 1
             else:
                 raise AssertionError('not supported')
 
@@ -66,21 +66,21 @@ class UnionFind:
 
     def size(self, elem = None):
         if elem:
-            return self._Sz[self.find(elem)]
-        return len(self._Prnt)
+            return self.Sz[self.find(elem)]
+        return len(self.Parent)
 
     def set_count(self):
-        return self._st_cnt
+        return self.set_cnt
 
 ''' Simple Union-Find
 def make_set(elem):
-    Prnt[elem] = elem
+    Parent[elem] = elem
     Sz[elem] = 1
 
 def find(elem):
-    while Prnt[elem] is not elem:
-        Prnt[elem] = Prnt[Prnt[elem]]
-        elem = Prnt[elem]
+    while Parent[elem] is not elem:
+        Parent[elem] = Parent[Parent[elem]]
+        elem = Parent[elem]
     return elem
 
 def union(elem1, elem2):
@@ -88,8 +88,8 @@ def union(elem1, elem2):
     if root1 is not root2:
         if Sz[root1] < Sz[root2]:
             root1, root2 = root2, root1
-        Prnt[root2] = root1
+        Parent[root2] = root1
         Sz[root1] += Sz[root2]
 
-Prnt, Sz = {}, {}
+Parent, Sz = {}, {}
 '''

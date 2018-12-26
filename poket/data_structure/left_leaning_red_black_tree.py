@@ -1,5 +1,6 @@
 from collections import deque
-class RBTree: 
+
+class LLRBTree: 
 
     root = None
 
@@ -50,7 +51,7 @@ class RBTree:
                 curr.left = self._insert(n, curr.left)
             else:
                 curr.right = self._insert(n, curr.right)
-            return self.FixUp(curr)
+            return self.fix_up(curr)
         return n
 
     def delete(self, key):
@@ -65,63 +66,63 @@ class RBTree:
         try:
             if key < curr.key:
                 if not (self.is_red(curr.left) or self.is_red(curr.left.left)):
-                    curr = self.MoveRedLeft(curr)
+                    curr = self.move_red_left(curr)
                 curr.left = self._delete(key, curr.left)
             else:
                 if self.is_red(curr.left):
-                    curr = self.RotateRight(curr)
+                    curr = self.rotate_right(curr)
                 if key == curr.key and not curr.right:
                     return None
                 if not (self.is_red(curr.right) or self.is_red(curr.right.left)):
-                    curr = self.MoveRedRight(curr)
+                    curr = self.move_red_right(curr)
                 if key == curr.key:
                     succ = self._min(curr.right)
                     curr.key, curr.value = succ.key, succ.value
-                    curr.right = self.DeleteMin(curr.right)
+                    curr.right = self.delete_min(curr.right)
                 else:
                     curr.right = self._delete(key, curr.right)
         except AttributeError:
             pass
-        return self.FixUp(curr)
+        return self.fix_up(curr)
 
-    def DeleteMin(self):
-        self.root = _DeleteMin(self.root)
+    def delete_min(self):
+        self.root = _delete_min(self.root)
         self.root.is_red = False
 
-    def RemoveMin(self):
-        self.DeleteMin()
+    def remove_min(self):
+        self.delete_min()
 
-    def _DeleteMin(self, curr):
+    def _delete_min(self, curr):
         if curr.left:
             if not (self.is_red(curr.left) or self.is_red(curr.left.left)):
-                curr = self.MoveRedLeft(curr)
-            curr.left = _DeleteMin(curr.left)
-            return FixUp(curr)
+                curr = self.move_red_left(curr)
+            curr.left = _delete_min(curr.left)
+            return fix_up(curr)
         return None
 
-    def DeleteMax(self):
-        self.root = self._DeleteMax(self.root)
+    def delete_max(self):
+        self.root = self._delete_max(self.root)
         self.root.is_red = False
 
-    def RemoveMax(self):
-        self.DeleteMax()
+    def remove_max(self):
+        self.delete_max()
 
-    def _DeleteMax(self, curr):
+    def _delete_max(self, curr):
         return
 
-    def MoveRedLeft(self, n):
-        self.FlipColors(n)
+    def move_red_left(self, n):
+        self.flip_colors(n)
         if self.is_red(n.right.left):
-            n.right = self.RotateRight(n.right)
-            n = self.RotateLeft(n)
-            self.FlipColors(n)
+            n.right = self.rotate_right(n.right)
+            n = self.rotate_left(n)
+            self.flip_colors(n)
         return n
 
-    def MoveRedRight(self, n):
-        self.FlipColors(n)
+    def move_red_right(self, n):
+        self.flip_colors(n)
         if self.is_red(n.left.left):
-            n = self.RotateRight(n)
-            self.FlipColors(n)
+            n = self.rotate_right(n)
+            self.flip_colors(n)
         return n
 
     def is_red(self, n):
@@ -129,21 +130,21 @@ class RBTree:
             return n.is_red
         return False
 
-    def FixUp(self, n):
+    def fix_up(self, n):
         if self.is_red(n.right) and not self.is_red(n.left):
-            n = self.RotateLeft(n)
+            n = self.rotate_left(n)
         if self.is_red(n.left) and self.is_red(n.left.left):
-            n = self.RotateRight(n)
+            n = self.rotate_right(n)
         if self.is_red(n.left) and self.is_red(n.right):
-            self.FlipColors(n)
+            self.flip_colors(n)
         return n
 
-    def FlipColors(self, n):
+    def flip_colors(self, n):
         n.left.is_red = not n.left.is_red
         n.right.is_red = not n.right.is_red
         n.is_red = not n.is_red
 
-    def RotateLeft(self, n):
+    def rotate_left(self, n):
         x = n.right
         n.right = x.left
         x.left = n
@@ -151,7 +152,7 @@ class RBTree:
         n.is_red = True
         return x
 
-    def RotateRight(self, n):
+    def rotate_right(self, n):
         x = n.left
         n.left = x.right
         x.right = n
@@ -160,18 +161,18 @@ class RBTree:
         return x
 
     def __iter__(self):
-        return iter(self.InOrder())
+        return iter(self.inorder())
 
-    def InOrder(self):
+    def inorder(self):
         Q = deque()
-        self._InOrder(self.root, Q)
+        self._inorder(self.root, Q)
         return Q
 
-    def _InOrder(self, n, Q):
+    def _inorder(self, n, Q):
         if n:
-            self._InOrder(n.left, Q)
+            self._inorder(n.left, Q)
             Q.append(n)
-            self._InOrder(n.right, Q)
+            self._inorder(n.right, Q)
 
 class Node:
 

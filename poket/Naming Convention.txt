@@ -1,9 +1,11 @@
 class name:
 	1. upper-case and lower-case
-	2. no '_' usage
+	2. no '_' allowed
 
 class arttribute:
-	'_' + variable name
+	1. lower-case for variables
+	2. the first letter is upper_case for collections
+	2. use '_' as space
 
 class behavior/function:
 	1. lower-case
