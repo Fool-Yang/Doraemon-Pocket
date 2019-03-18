@@ -8,3 +8,4 @@ from .is_prime import IsPrime
 from .kadane import Kadane
 from .power_set import PowerSet
 from .prime_factor import PrimeFactor
+from .hamiltonian import Hamiltonian
