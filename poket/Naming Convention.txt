@@ -1,11 +1,11 @@
 class name:
 	1. upper-case and lower-case
-	2. no '_' allowed
+	2. no '_'
 
 class arttribute:
 	1. lower-case for variables
 	2. the first letter is upper_case for collections
-	2. use '_' as space
+	3. use '_' as space
 
 class behavior/function:
 	1. lower-case
@@ -13,7 +13,7 @@ class behavior/function:
 
 main function for algorithms:
 	1. upper-case and lower-case
-	2. no '_' usage
+	2. no '_'
 
 auxiliary function for algorithms:
 	1. lower-case
