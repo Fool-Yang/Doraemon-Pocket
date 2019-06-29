@@ -47,10 +47,12 @@ def convexHull(Points):
     if len(Points) < 3:
         return Points
     s = min(Points)
-    Points.sort(key = lambda p: (angle((1, 0), (p[0] - s[0], p[1] - s[1])), (p[0] - s[0])**2 + (p[1] - s[1])**2))
-    Hull = [Points[0], Points[1]]
-    last_vector = (Hull[-1][0] - Hull[-2][0], Hull[-1][1] - Hull[-2][1])
-    for i in range(2, len(Points)):
+    # sort based on the angle between a downward direction vector and s->p
+    # the angle of the starting point is 0 and must be the min
+    Points.sort(key = lambda p: (angle((0, -1), (p[0] - s[0], p[1] - s[1])), (p[0] - s[0])**2 + (p[1] - s[1])**2))
+    Hull = [Points[0], Points[1], Points[2]]
+    for i in range(3, len(Points)):
+        last_vector = (Hull[-1][0] - Hull[-2][0], Hull[-1][1] - Hull[-2][1])
         new_vector = (Points[i][0] - Hull[-1][0], Points[i][1] - Hull[-1][1])
         while cross(last_vector, new_vector) < 0:
             Hull.pop()
