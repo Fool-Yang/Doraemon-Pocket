@@ -15,7 +15,7 @@ def Product(a, b):
 # Pe = event probability
 # let X be the number of times the event happens
 # returns the probability of X is in [lower, upper)
-def P_range(Pe, trial, lower = 0, upper = 0):
+def Binomial(Pe, trial, lower = 0, upper = 0):
     if not upper:
         upper = trial + 1
     _Pe, Pr = 1.0 - Pe, 0.0
