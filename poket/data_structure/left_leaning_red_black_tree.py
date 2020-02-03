@@ -64,26 +64,29 @@ class LLRBTree:
         self.delete(key)
 
     def _delete(self, key, curr):
-        try:
-            if key < curr.key:
-                if not (self.is_red(curr.left) or self.is_red(curr.left.left)):
-                    curr = self.move_red_left(curr)
-                curr.left = self._delete(key, curr.left)
+        if key < curr.key:
+            cmp = -1
+        elif curr.key < key:
+            cmp = 1
+        else:
+            cmp = 0
+        if cmp < 0:
+            if not (self.is_red(curr.left) or self.is_red(curr.left.left)):
+                curr = self.move_red_left(curr)
+            curr.left = self._delete(key, curr.left)
+        else:
+            if self.is_red(curr.left):
+                curr = self.rotate_right(curr)
+            if cmp == 0 and not curr.right:
+                return None
+            if not (self.is_red(curr.right) or self.is_red(curr.right.left)):
+                curr = self.move_red_right(curr)
+            if cmp == 0:
+                succ = self._min(curr.right)
+                curr.key, curr.value = succ.key, succ.value
+                curr.right = self._delete_min(curr.right)
             else:
-                if self.is_red(curr.left):
-                    curr = self.rotate_right(curr)
-                if key == curr.key and not curr.right:
-                    return None
-                if not (self.is_red(curr.right) or self.is_red(curr.right.left)):
-                    curr = self.move_red_right(curr)
-                if key == curr.key:
-                    succ = self._min(curr.right)
-                    curr.key, curr.value = succ.key, succ.value
-                    curr.right = self._delete_min(curr.right)
-                else:
-                    curr.right = self._delete(key, curr.right)
-        except AttributeError:
-            pass
+                curr.right = self._delete(key, curr.right)
         return self.fix_up(curr)
 
     def delete_min(self):
@@ -108,6 +111,9 @@ class LLRBTree:
     def remove_max(self):
         self.delete_max()
 
+    '''
+    TODO
+    '''
     def _delete_max(self, curr):
         return
 
