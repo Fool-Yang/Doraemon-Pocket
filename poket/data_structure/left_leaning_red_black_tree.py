@@ -79,7 +79,7 @@ class LLRBTree:
                 if key == curr.key:
                     succ = self._min(curr.right)
                     curr.key, curr.value = succ.key, succ.value
-                    curr.right = self.delete_min(curr.right)
+                    curr.right = self._delete_min(curr.right)
                 else:
                     curr.right = self._delete(key, curr.right)
         except AttributeError:
@@ -97,8 +97,8 @@ class LLRBTree:
         if curr.left:
             if not (self.is_red(curr.left) or self.is_red(curr.left.left)):
                 curr = self.move_red_left(curr)
-            curr.left = _delete_min(curr.left)
-            return fix_up(curr)
+            curr.left = self._delete_min(curr.left)
+            return self.fix_up(curr)
         return None
 
     def delete_max(self):
