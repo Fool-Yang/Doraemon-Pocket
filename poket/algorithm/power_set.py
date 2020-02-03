@@ -1,16 +1,10 @@
 def PowerSet(S):
-    trans = type(S) is not list
-    if trans:
-        S = list(S)
-    power_set = _power_set_r(S)
-    if trans:
-        power_set = set(power_set)
-    return power_set
+    return _power_set(list(S) if type(S) is not list else S)
 
 def _power_set(S):
-    if len(S) == 0:
-        return [[]]
-    elem = S.pop()
-    Pt1 = _power_set(S)
-    Pt2 = [[elem] + Sub for Sub in Pt1]
-    return Pt1 + Pt2
+    if S:
+        elem = S.pop()
+        Pt1 = _power_set(S)
+        Pt2 = [Sub + [elem] for Sub in Pt1]
+        return Pt1 + Pt2
+    return [[]]

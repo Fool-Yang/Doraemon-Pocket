@@ -87,7 +87,7 @@ class LLRBTree:
         return self.fix_up(curr)
 
     def delete_min(self):
-        self.root = _delete_min(self.root)
+        self.root = self._delete_min(self.root)
         self.root.is_red = False
 
     def remove_min(self):
