@@ -48,10 +48,14 @@ class LLRBTree:
 
     def _insert(self, n, curr):
         if curr:
-            if n.key <= curr.key:
+            if n.key < curr.key:
                 curr.left = self._insert(n, curr.left)
-            else:
+            elif curr.key < n.key:
                 curr.right = self._insert(n, curr.right)
+            else:
+                # don't insert the same key twice
+                # or you mess up the delete
+                curr.value = n.value
             return self.fix_up(curr)
         return n
 
@@ -88,7 +92,8 @@ class LLRBTree:
 
     def delete_min(self):
         self.root = self._delete_min(self.root)
-        self.root.is_red = False
+        if self.root:
+            self.root.is_red = False
 
     def remove_min(self):
         self.delete_min()
@@ -103,16 +108,21 @@ class LLRBTree:
 
     def delete_max(self):
         self.root = self._delete_max(self.root)
-        self.root.is_red = False
+        if self.root:
+            self.root.is_red = False
 
     def remove_max(self):
         self.delete_max()
 
-    '''
-    TODO
-    '''
     def _delete_max(self, curr):
-        return
+        if self.is_red(curr.left):
+            curr = self.rotate_right(curr)
+        if curr.right:
+            if not (self.is_red(curr.right) or self.is_red(curr.right.left)):
+                curr = self.move_red_right(curr)
+            curr.right = self._delete_max(curr.right)
+            return self.fix_up(curr)
+        return None
 
     def move_red_left(self, n):
         self.flip_colors(n)
