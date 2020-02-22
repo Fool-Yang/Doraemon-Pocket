@@ -25,8 +25,8 @@ def signedTriangleArea(tri):
     return (tri[0][0]*(tri[1][1]-tri[2][1])+tri[1][0]*(tri[2][1]-tri[0][1])+tri[2][0]*(tri[0][1]-tri[1][1]))/2
 
 def area(polygon):
-    area 0.0
-    for i in range(2, len(polygon):
+    area = 0.0
+    for i in range(2, len(polygon)):
         area += signedTriangleArea((polygon[0], polygon[i - 1], polygon[i]))
     return abs(area)
 
