@@ -8,20 +8,22 @@ def BellmanFord(G, s):
     for _ in range(n - 1):
         # for each edge (u, v)
         for u in range(n):
-            Edges_from_u = G[u]
-            for v in Edges_from_u:
-                new_dist = Dist[u] + Edges_from_u[v]
-                if new_dist < Dist[v]:
-                    Dist[v] = new_dist
-                    Prev[v] = u
+            if Dist[u] < inf: # this if statement can reduce runtime
+                Edges_from_u = G[u]
+                for v in Edges_from_u:
+                    new_dist = Dist[u] + Edges_from_u[v]
+                    if new_dist < Dist[v]:
+                        Dist[v] = new_dist
+                        Prev[v] = u
     # check for neg-cycle
     Neg_inf = []
     for u in range(n):
-        Edges_from_u = G[u]
-        for v in Edges_from_u:
-            if Dist[u] + Edges_from_u[v] < Dist[v]:
-                Dist[v] = neg_inf
-                Neg_inf.append(v)
+        if Dist[u] < inf:
+            Edges_from_u = G[u]
+            for v in Edges_from_u:
+                if Dist[u] + Edges_from_u[v] < Dist[v]:
+                    Dist[v] = neg_inf
+                    Neg_inf.append(v)
     for u in Neg_inf:
         Q = [u]
         while Q:

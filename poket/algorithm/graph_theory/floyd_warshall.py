@@ -13,11 +13,12 @@ def FloydWarshall(G):
             Dist[u][u] = 0
     for j in range(n):
         for i in range(n):
-            for k in range(n):
-                new_dist = Dist[i][j] + Dist[j][k]
-                if new_dist < Dist[i][k]:
-                    Dist[i][k] = new_dist
-                    Prev[i][k] = Prev[j][k]
+            if Dist[i][j] < inf: # this if statement can reduce runtime
+                for k in range(n):
+                    new_dist = Dist[i][j] + Dist[j][k]
+                    if new_dist < Dist[i][k]:
+                        Dist[i][k] = new_dist
+                        Prev[i][k] = Prev[j][k]
     # check for neg-cycle
     for j in range(n):
         if Dist[j][j] < 0:
