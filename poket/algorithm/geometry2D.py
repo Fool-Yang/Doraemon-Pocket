@@ -10,7 +10,7 @@ def distance(a, b):
 def dot(u, v):
     return u[0] * v[0] + u[1] * v[1]
 
-# only returns k component
+# only returns the k component (instead of the vector <i, j, k>)
 def cross(u, v):
     return u[0] * v[1] - v[0] * u[1]
 
@@ -30,6 +30,10 @@ def area(polygon):
         area += signedTriangleArea((polygon[0], polygon[i - 1], polygon[i]))
     return abs(area)
 
+from math import tan, pi
+def areaOfRegularPolygon(n, side_length):
+    return (n * side_length / 2) * side_length / 2 / tan(pi / n)
+
 def isInTriangle(point, triangle):
     v1 = (point, triangle[0][0] - point[0], triangle[0][1] - point[1])
     v2 = (point, triangle[1][0] - point[0], triangle[1][1] - point[1])
@@ -38,9 +42,8 @@ def isInTriangle(point, triangle):
     return (p1 >= 0 and p2 >= 0 and p3 >= 0) or (p1 <= 0 and p2 <= 0 and p3 <= 0)
 
 '''
-Everything below this line is learned from computational geometry class
+Computational geometry stuff
 '''
-
 # The lambda function will put points on the hull, even if they are not extreme points
 # All points could be collinear. In that case it does not care and outputs a line
 def convexHull(Points):
