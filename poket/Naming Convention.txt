@@ -17,7 +17,7 @@ main function for algorithms:
 
 auxiliary function for algorithms:
 	1. lower-case
-	2. '_' + fuction name
+	2. '_' as prefix + fuction name
 
 folder:
 	1. lower-case
