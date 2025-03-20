@@ -1,0 +1,24 @@
+class name:
+	1. upper-case and lower-case
+	2. no use of '_'
+
+class attribute:
+	1. lower-case for variables
+	2. the first letter is upper-case for collections
+	3. use '_' as space
+
+class behaviour/function:
+	1. lower-case
+	2. use '_' as space
+
+main function for algorithms:
+	1. upper-case and lower-case
+	2. no use of '_'
+
+auxiliary function for algorithms:
+	1. upper-case and lower-case
+	2. '_' as prefix + function name
+
+folder and file name:
+	1. lower-case
+	2. use '_' as space
