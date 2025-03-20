@@ -1,4 +1,4 @@
-def max_flow(G):
+def Max_Flow(G):
     # construct residual graph with flow/cap
     Gr = [{} for _ in range(len(G))]
     for u in range(len(G)):
