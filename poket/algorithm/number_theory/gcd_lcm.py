@@ -1,6 +1,6 @@
-def gcd(a, b):
+def GCD(a, b):
     while b: a, b = b, a % b
     return a
 
-def lcm(a, b):
+def LCM(a, b):
     return a * b // GCD(a, b)
