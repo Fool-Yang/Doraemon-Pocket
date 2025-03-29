@@ -1,6 +1,3 @@
-# deque used for inorder output
-from collections import deque
-
 # left leaning red black tree
 class RBTree:
 
@@ -148,7 +145,7 @@ class RBTree:
         return iter(self.inorder())
 
     def inorder(self):
-        Q = deque()
+        Q = []
         self._inorder(self.root, Q)
         return Q
 
