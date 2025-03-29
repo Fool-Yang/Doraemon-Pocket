@@ -1,9 +1,5 @@
 class UnionFind:
 
-    Parent = {}
-    Sz = {}
-    set_cnt = 0
-
     def __init__(self, init_Arr = None):
         self.Parent = {}
         self.Sz = {}
@@ -52,10 +48,7 @@ class UnionFind:
                 del self.Sz[root]
                 self.set_cnt -= 1
             else:
-                raise AssertionError('not supported')
-
-    def remove(self, elem):
-        self.delete(elem)
+                raise NotImplementedError("delete function is not implemented")
 
     def move(self, elem1, elem2):
         root1, root2 = self.find(elem1), self.find(elem2)
