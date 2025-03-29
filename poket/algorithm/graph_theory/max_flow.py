@@ -1,3 +1,5 @@
+from collections import deque
+
 def MaxFlow(G):
     # construct residual graph with flow/cap
     Gr = [{} for _ in range(len(G))]
@@ -14,14 +16,9 @@ def MaxFlow(G):
         # BFS
         Prev = [None]*len(Gr)
         Prev[0] = len(Gr)
-        Queue = [0]*len(Gr)
-        start = 0
-        tail = 1
-        while start != tail:
-            u = Queue[start]
-            start += 1
-            if start >= len(Queue):
-                start -= len(Queue)
+        Queue = deque([0])
+        while Queue:
+            u = Queue.popleft()
             for v in Gr[u]:
                 flow, cap = Gr[u][v]
                 if Prev[v] is None and flow < cap:
@@ -29,10 +26,7 @@ def MaxFlow(G):
                     if v == sink:
                         augmentingPathFound = True
                         break
-                    Queue[tail] = v
-                    tail += 1
-                    if tail >= len(Queue):
-                        tail -= len(Queue)
+                    Queue.append(v)
             # this helps break two levels of loops
             else:
                 continue
