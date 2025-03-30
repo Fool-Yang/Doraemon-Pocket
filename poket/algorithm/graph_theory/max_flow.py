@@ -1,52 +1,55 @@
 from collections import deque
 
+# Dinic's algorithm (Ford–Fulkerson with a level graph)
 def MaxFlow(G, s, t):
     # construct residual graph with flow/cap
     Gr = [{} for _ in range(len(G))]
     for u in range(len(G)):
         for v in G[u]:
             Gr[u][v] = [0, G[u][v]]
-            if u not in Gr[v]:
+            if u not in Gr[v]: # do not overwrite existing edges
                 Gr[v][u] = [0, 0]
     # find augmenting path until fails
     total_flow = 0
-    augmentingPathFound = True
-    while augmentingPathFound:
-        augmentingPathFound = False
+    augmenting_path_found = True
+    while augmenting_path_found:
         # BFS
-        Prev = [None]*len(Gr)
-        Prev[s] = len(Gr)
-        Queue = deque([s])
-        while Queue:
-            u = Queue.popleft()
+        Level = [-1]*len(Gr) # distance to source in number of edges
+        Level[s] = 0
+        BFS_Queue = deque([s])
+        while BFS_Queue:
+            u = BFS_Queue.popleft()
             for v in Gr[u]:
                 flow, cap = Gr[u][v]
-                if Prev[v] is None and flow < cap:
-                    Prev[v] = u
-                    if v == t:
-                        augmentingPathFound = True
-                        break
-                    Queue.append(v)
-            # this helps break two levels of loops
-            else:
-                continue
-            break
-        # trace back the path if found
-        if augmentingPathFound:
-            # find bottleneck
-            inc = float("inf")
-            curr = t
-            while curr != s:
-                flow, cap = Gr[Prev[curr]][curr]
-                room = cap - flow
-                if room < inc:
-                    inc = room
-                curr = Prev[curr]
-            # push more flow
-            curr = t
-            while curr != s:
-                Gr[Prev[curr]][curr][0] += inc
-                Gr[curr][Prev[curr]][0] -= inc
-                curr = Prev[curr]
-            total_flow += inc
+                if Level[v] == -1 and flow < cap:
+                    Level[v] = Level[u] + 1
+                    BFS_Queue.append(v)
+        augmenting_path_found = Level[t] != -1
+        if augmenting_path_found:
+            # DFS
+            more_flow = True
+            while more_flow:
+                more_flow = _send_flow(Gr, Level, float("inf"), s, t)
+                total_flow += more_flow
     return Gr, total_flow
+
+def _send_flow(Gr, Level, input_flow, u, t):
+    if u == t:
+        return input_flow
+    total_output_flow = 0
+    for v in Gr[u]:
+        flow, cap = Gr[u][v]
+        # the level graph creates a DAG
+        if Level[v] == Level[u] + 1 and flow < cap:
+            output_flow = input_flow
+            # find bottleneck
+            room = cap - flow
+            if room < output_flow:
+                output_flow = room
+            output_flow = _send_flow(Gr, Level, output_flow, v, t)
+            if output_flow:
+                Gr[u][v][0] += output_flow
+                Gr[v][u][0] -= output_flow
+                total_output_flow += output_flow
+                input_flow -= output_flow
+    return total_output_flow
